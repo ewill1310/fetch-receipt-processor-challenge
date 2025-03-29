@@ -1,5 +1,5 @@
 # Receipt Processor Web Service (Go)
-
+The service was initially coded/ran on a windows device, with no current access to MacOS or Linux so testing for those platforms have not been done. 
 ## Overview
 This is a RESTful web service that processes receipts and calculates reward points based on predefined rules. The service provides two endpoints:
 
@@ -37,18 +37,22 @@ Description: Accepts a receipt JSON, assigns it a unique ID, and calculates poin
 
 Example Request
 ```sh
-curl -X POST http://localhost:8080/receipts/process \
-     -H "Content-Type: application/json" \
-     -d '{
-           "retailer": "Target",
-           "purchaseDate": "2022-01-01",
-           "purchaseTime": "13:01",
-           "items": [
-             { "shortDescription": "Mountain Dew 12PK", "price": "6.49" },
-             { "shortDescription": "Emils Cheese Pizza", "price": "12.25" }
-           ],
-           "total": "18.74"
-         }'
+$headers = @{
+    "Content-Type" = "application/json"
+}
+
+$response = Invoke-WebRequest -Uri "http://localhost:8080/receipts/process" -Method Post -Headers $headers -Body '{
+    "retailer": "Target",
+    "purchaseDate": "2022-01-01",
+    "purchaseTime": "13:01",
+    "items": [
+        { "shortDescription": "Mountain Dew 12PK", "price": "6.49" },
+        { "shortDescription": "Emils Cheese Pizza", "price": "12.25" }
+    ],
+    "total": "35.35"
+}'
+
+$response.Content
 ```
 
 Example Response
@@ -63,16 +67,20 @@ Description: Retrieves the points for a given receipt ID.
 
 Example Request
 ```sh
-curl -X GET http://localhost:8080/receipts/7fb1377b-b223-49d9-a31a-5a02701dd310/points
+$response = Invoke-WebRequest -Uri "http://localhost:8080/receipts/6f985bef-4c8a-4fae-8dfb-ecdb0a4240ce/points" -Method Get
+
+$response.Content
 ```
 
 Example Response
 ```sh
 { "points": 28 }
 ```
+### 3. Stopping the Server
+To stop the server, simply press Ctrl + C in the terminal where it's running.
 
 ## Testing
-You can manually test the API using curl, Postman, or any API testing tool.
+You can manually test the API using powershell, curl, Postman, or any API testing tool.
 
 ## Author:
 Evan Williams
