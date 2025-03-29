@@ -1,4 +1,4 @@
-module receipt-processor
+module github.com/ewill1310/receipt-processor
 
 go 1.22.3
 
